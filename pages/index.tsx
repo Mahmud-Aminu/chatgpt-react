@@ -1,6 +1,5 @@
 import type from "next";
 import { useEffect, useState } from "react";
-import Login, { LOGIN_CK } from "./login";
 import Chat from "../components/chat";
 import Input from "../components/input";
 import { useRouter } from "next/router";
@@ -27,34 +26,6 @@ export default function Home() {
     },
   ]);
   const router = useRouter();
-
-  useEffect(() => {
-    async function checkLogin() {
-      let loginCK = localStorage.getItem(LOGIN_CK);
-      if (!loginCK) {
-        router.replace("/login");
-        return;
-      }
-
-      loginCK = window.atob(loginCK);
-      try {
-        const res = await fetch(
-          `${location.origin}/api/login?password=${loginCK}`
-        );
-        if (!res.ok) {
-          throw Error(res.statusText);
-        }
-        const data = await res.json();
-        if (!data || !data?.result) {
-          router.replace("/login");
-        }
-      } catch (error) {
-        router.replace("/login");
-      }
-    }
-
-    checkLogin();
-  }, [router]);
 
   return (
     <div className="flex w-full flex-col items-center">
